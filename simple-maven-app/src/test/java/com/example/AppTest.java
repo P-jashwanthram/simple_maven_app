@@ -1,38 +1,28 @@
 package com.example;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+public class AppTest {
+
+    @Test
+    public void testGrades() {
+        App app = new App();
+
+        assertEquals("Grade S", app.getGrade(95));
+        assertEquals("Grade A", app.getGrade(85));
+        assertEquals("Grade B", app.getGrade(72));
+        assertEquals("Grade C", app.getGrade(60));
+        assertEquals("Grade D", app.getGrade(55));
+        assertEquals("Grade E", app.getGrade(45));
+        assertEquals("Grade F", app.getGrade(30));
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    @Test
+    public void testEdgeCases() {
+        App app = new App();
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+        assertEquals("Grade S", app.getGrade(100));
+        assertEquals("Grade F", app.getGrade(0));
     }
 }
