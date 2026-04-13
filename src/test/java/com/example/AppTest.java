@@ -2,22 +2,51 @@ package com.example;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import com.example.App.Student;
 
 public class AppTest {
 
+    private static final int ELIGIBILITY_THRESHOLD = 15;
+
     @Test
-    public void testNetSalaryCalculations() {
-        App app = new App();
-        assertEquals(34000.0, app.calculateNetSalary(30000, 5000, 2000, 1800, 1200), 0.001);
-        assertEquals(90000.0, app.calculateNetSalary(80000, 20000, 10000, 5000, 15000), 0.001);
-        assertEquals(11500.0, app.calculateNetSalary(10000, 1000, 500, 0, 0), 0.001);
-        assertEquals(0.0, app.calculateNetSalary(5000, 0, 0, 2500, 2500), 0.001);
+    public void testRegistrationAndEligibility_exactThreshold() {
+        Student s = new Student("Alice", "S001");
+        s.registerSubject("Mathematics", 5);
+        s.registerSubject("Physics", 5);
+        s.registerSubject("Chemistry", 5);
+
+        assertEquals(3, s.getRegisteredSubjects().size());
+        assertEquals(15, s.getTotalCredits());
+        assertTrue(s.isEligible(ELIGIBILITY_THRESHOLD));
     }
 
     @Test
-    public void testEdgeCases() {
-        App app = new App();
-        assertEquals(0.0, app.calculateNetSalary(0, 0, 0, 0, 0), 0.001);
-        assertEquals(1000000.0, app.calculateNetSalary(1000000, 100000, 100000, 100000, 100000), 0.001);
+    public void testNotEligible_whenBelowThreshold() {
+        Student s = new Student("Bob", "S002");
+        s.registerSubject("History", 3);
+        s.registerSubject("English", 4);
+
+        assertEquals(2, s.getRegisteredSubjects().size());
+        assertEquals(7, s.getTotalCredits());
+        assertFalse(s.isEligible(ELIGIBILITY_THRESHOLD));
+    }
+
+    @Test
+    public void testEmptyRegistration() {
+        Student s = new Student("Carol", "S003");
+
+        assertEquals(0, s.getRegisteredSubjects().size());
+        assertEquals(0, s.getTotalCredits());
+        assertFalse(s.isEligible(ELIGIBILITY_THRESHOLD));
+    }
+
+    @Test
+    public void testLargeCreditsAndEdgeCases() {
+        Student s = new Student("Dave", "S004");
+        s.registerSubject("Project", 20);
+
+        assertEquals(1, s.getRegisteredSubjects().size());
+        assertEquals(20, s.getTotalCredits());
+        assertTrue(s.isEligible(ELIGIBILITY_THRESHOLD));
     }
 }
